@@ -1,8 +1,0 @@
-body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #0b0d10; color: #e6edf3; }
-.container { width: min(1100px, 92%); margin: auto; }
-.site-header { background: #11161c; padding: 10px 0; }
-.nav a, .nav button { color: white; margin-left: 10px; text-decoration: none; }
-.hero { padding: 2rem 0; }
-.btn { background: #4da3ff; color: white; padding: 0.5rem 1rem; text-decoration: none; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
-.card { background: #11161c; padding: 1rem; border-radius: 8px; }
