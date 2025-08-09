@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project – Michael Ibeto</title>
+  <meta name="color-scheme" content="light dark" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <style>
+    /* Page-local tweaks for readable article within your site style */
+    .crumbs { margin: 1rem 0; }
+    .crumbs a { text-decoration: none; }
+    .prose { max-width: 800px; margin: 1rem auto 3rem; line-height: 1.7; }
+    .prose h1 { font-size: 2rem; margin-bottom: .25rem; }
+    .prose h2 { margin-top: 1.5rem; }
+    .prose pre { background: var(--surface); padding: 1rem; overflow:auto; border-radius: 8px; }
+    .prose code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .meta { color: var(--muted); margin: .25rem 0 1rem; }
+  </style>
+</head>
+<body>
+  <!-- SAME HEADER/NAV AS HOME -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <a href="./" class="brand-link">INNOVATE</a>
+      </div>
+      <nav class="nav">
+        <a href="index.html#projects">Design Portfolio</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#contact">Contact</a>
+        <button id="themeToggle" type="button" aria-label="Switch theme">🌓</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="crumbs"><a href="index.html#projects">← Back to projects</a></div>
+
+    <article class="prose">
+      <h1 id="projTitle">Loading…</h1>
+      <div class="meta" id="projMeta"></div>
+      <div id="projContent"></div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>© <span id="year"></span> Michael Ibeto</small>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/project-viewer.js"></script>
+</body>
+</html>

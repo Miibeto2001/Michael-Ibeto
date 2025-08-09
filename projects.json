@@ -1,0 +1,20 @@
+{
+  "projects": [
+    {
+      "file": "projects/Digital-Design.md",
+      "title": "",
+      "tags": ["Digital Design", " (HDL: Verilog)"],
+      "link": "https://github.com/Miibeto2001/Digital-Design"
+    },
+    {
+      "file": "projects/mps-swd-tester.md",
+      "title": "",
+      "tags": ["STM32", "SWD", "Automation"]
+    },
+    {
+      "file": "projects/ltspice-ac-toolkit.md",
+      "title": "",
+      "tags": ["Analog", "LTspice"]
+    }
+  ]
+}

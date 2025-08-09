@@ -1,1 +1,0 @@
-const grid=document.getElementById('projectsGrid');fetch('projects.json').then(r=>r.json()).then(data=>{data.projects.forEach(p=>{const el=document.createElement('div');el.className='card';el.innerHTML=`<h3>${p.title}</h3><p>${p.description}</p>`;grid.appendChild(el);});});
