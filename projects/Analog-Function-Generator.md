@@ -1,4 +1,4 @@
-# Asic/Fpga Design
+# Analog Function Generator
 
 xxxxxxxxxxxxxxxxxxxxxxxx
 

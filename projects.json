@@ -7,9 +7,9 @@
       "link": "https://github.com/Miibeto2001/Digital-Design"
     },
     {
-      "file": "projects/mps-swd-tester.md",
+      "file": "projects/Analog-Function-Generator.md",
       "title": "",
-      "tags": ["STM32", "SWD", "Automation"]
+      "tags": ["Analog", "LTspice", "KiCAD"]
     },
     {
       "file": "projects/ltspice-ac-toolkit.md",
