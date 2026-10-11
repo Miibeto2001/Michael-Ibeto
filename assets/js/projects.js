@@ -19,7 +19,7 @@ const grid = document.getElementById('projectsGrid');
         } catch {}
       }
       const { title, excerpt } = parseMarkdown(md, p.title);
-      renderCard({ title, excerpt, tags: p.tags, file: p.file || null, repo: p.link || null });
+      renderCard({ title, excerpt, tags: p.tags, file: p.file || null, repo: p.link || null, codeRequestEmail: p.codeRequestEmail || null });
     }
   } catch (e) {
     console.error(e);
@@ -27,13 +27,17 @@ const grid = document.getElementById('projectsGrid');
   }
 })();
 
-function renderCard({ title, excerpt, tags, file, repo }) {
+function renderCard({ title, excerpt, tags, file, repo, codeRequestEmail }) {
   const el = document.createElement('div');
   el.className = 'card';
 
   let actions = '';
   if (file) actions += `<a class="btn" href="project.html?file=${encodeURIComponent(file)}">Read</a>`;
   if (repo) actions += ` <a class="btn" href="${repo}" target="_blank" rel="noopener">Repo</a>`;
+  if (codeRequestEmail) {
+    actions += ` <a class="btn" href="${codeRequestMailto(codeRequestEmail, title)}" title="Email ${escapeHtml(codeRequestEmail)}">Request Code</a>`;
+    actions += ` <button type="button" class="btn btn-copy-email" data-email="${escapeHtml(codeRequestEmail)}" title="Copy email address">Copy Email</button>`;
+  }
 
   el.innerHTML = `
     <h3>${escapeHtml(title || 'Untitled Project')}</h3>
@@ -66,3 +70,23 @@ function parseMarkdown(md, titleOverride) {
 }
 
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+function codeRequestMailto(email, title) {
+  const subject = `GitHub access request: ${title || 'Project'}`;
+  const body = `Hi Michael,\n\nCould you add me as a collaborator on the private GitHub repo for your "${title || 'project'}" project? My GitHub username is: \n\nThanks!`;
+  return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+grid.addEventListener('click', async (e) => {
+  const btn = e.target.closest('.btn-copy-email');
+  if (!btn) return;
+  const email = btn.dataset.email;
+  const original = btn.textContent;
+  try {
+    await navigator.clipboard.writeText(email);
+    btn.textContent = 'Copied!';
+  } catch {
+    btn.textContent = email;
+  }
+  setTimeout(() => { btn.textContent = original; }, 1800);
+});

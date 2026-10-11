@@ -105,6 +105,9 @@ h1, h2, h3 { margin: .2em 0 .4em; }
   text-decoration: none;
   border-radius: 8px;
   display: inline-block;
+  border: none;
+  font: inherit;
+  cursor: pointer;
 }
 
 /* =========================

@@ -1,14 +1,19 @@
 {
   "projects": [
     {
-      "file": "projects/Digital-Design.md",
-      "title": "",
+      "title": "CNN Convolution Pipeline (1024x1024, 4x4 Kernel)",
+      "file": "projects/CNN-Pipeline-Convolution.md",
+      "tags": ["Digital Design", "ASIC/FPGA", "SystemVerilog", "ECE564"],
+      "link": "https://github.com/Miibeto2001/CNN-Convolution-Pipeline"
+    },
+    {
+      "title": "Asic/FPGA Design",
       "tags": ["Digital Design", " (HDL: Verilog)"],
       "link": "https://github.com/Miibeto2001/Digital-Design"
     },
     {
       "file": "projects/Analog-Function-Generator.md",
-      "title": "",
+      "title": "Analog Design",
       "tags": ["Analog", "LTspice", "KiCAD"]
     },
     {
