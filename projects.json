@@ -3,7 +3,7 @@
     {
       "title": "CNN Convolution Pipeline (1024x1024, 4x4 Kernel)",
       "file": "projects/CNN-Pipeline-Convolution.md",
-      "tags": ["Digital Design", "ASIC/FPGA", "SystemVerilog", "ECE564"],
+      "tags": ["ASIC/FPGA", "SystemVerilog", "RTL Design", "Memory Interfaces", "Synthesis & Timing Closure"],
       "link": "https://github.com/Miibeto2001/CNN-Convolution-Pipeline",
       "featured": true,
       "illustration": "cnn",
