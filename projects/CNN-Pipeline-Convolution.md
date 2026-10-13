@@ -54,6 +54,41 @@ DRAM is laid out as 64-bit little-endian words: the first 16 entries hold the 4�
 
 The same scheme scales to the full-size matrices used here: 1021 output rows/columns pad out to 1024.
 
+### Sliding-Window Addressing Algorithm
+Every output pixel comes from sliding the 4×4 kernel one position at a time across the 1024×1024 input, left to right within a row and then down to the next row, producing a 1021×1021 grid of valid window positions. At each position, the hardware doesn't fetch the whole 4×4 window at once — it steps through the 16 operands one at a time for the single serialized MAC unit, so the DRAM address has to be recomputed every cycle from two nested counters: an outer counter marking the window's current top-left corner, and an inner counter marking which of the 4 rows/columns *within* that window is being read right now.
+
+That's exactly what this part of the DUT does:
+
+```systemverilog
+// Declare internal address
+assign kernel_Address_0 = 32'h0000_0000;
+assign kernel_Address_1 = 32'h0000_0008;
+assign dram_addr_input  = 32'h0000_0010 + (row * 1024) + col*8;
+assign dram_addr_output = 32'h0000_0000 + col_out*8;
+assign row = row_next + row_index;
+assign col = col_next + col_window;
+// in_addr_sel determines which address gets sent to DRAM
+// 00 -> kernel address 0
+// 01 -> kernel address 1
+// 10 -> input address
+// 11 -> feedback
+always_comb begin
+    case (in_addr_sel)
+    2'b00:   in_addr_d = kernel_Address_0;
+    2'b01:   in_addr_d = kernel_Address_1;
+    2'b10:   in_addr_d = dram_addr_input;
+    2'b11:   in_addr_d = in_addr_q;
+    default: in_addr_d = '0;
+    endcase
+end
+```
+
+`row_next`/`col_next` are the sliding window's current position in the image (they advance as the window moves across and down), while `row_index`/`col_window` are the 0–3 offsets that step through the window's 4 rows and columns internally while that position is being accumulated. Adding them together (`row = row_next + row_index`, `col = col_next + col_window`) gives the true pixel coordinate to fetch next. `dram_addr_input` turns that into a byte address: `0x10` is the base address where the input matrix starts (right after the 16 bytes of kernel data), `row*1024` skips to the correct row (each row is 1024 bytes), and `col*8` lands on the correct burst-aligned group of 8 pixels, matching the 64-bit burst layout described above. The `in_addr_sel` mux then picks what actually goes out on the address bus each cycle — one of the two fixed kernel addresses during kernel load, the computed sliding address during normal operation, or a held/feedback value while the FSM is waiting mid-burst.
+
+<div class="conv-animation" id="convAnim">Loading interactive demo&hellip;</div>
+
+The demo above raster-scans a 4×4 window across a stylized 1024×1024 grid the same way `row_next`/`col_next` do in hardware, with a live readout of the resulting `dram_addr_input` computed from the formula above. Positions are sampled across the full sweep for visualization — the real datapath steps through all 1,021×1,021 window positions, one MAC operand at a time.
+
 ### Datapath & FSM Diagrams
 <img src="assets/img/cnn-pipeline/datapath-fsm-diagram.png" alt="Hand-drawn datapath block diagram, FSM state diagram, and DRAM addressing notes for the convolution engine" style="max-width:100%;border-radius:8px;margin:0.5rem 0;" />
 

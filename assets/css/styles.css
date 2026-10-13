@@ -311,6 +311,32 @@ main.container > section.hero { padding-top: 3.5rem; position: relative; }
 .site-footer small { color: var(--muted); font-size: .85rem; }
 
 /* =========================
+   Convolution sliding-window animation
+   ========================= */
+.conv-animation {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .9rem;
+  color: var(--muted);
+  font-size: .9rem;
+}
+.conv-anim-canvas-wrap { border-radius: 8px; overflow: hidden; line-height: 0; }
+.conv-anim-canvas { display: block; }
+.conv-anim-readout { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
+.conv-anim-field { display: flex; flex-direction: column; align-items: center; gap: .15rem; }
+.conv-anim-label { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.conv-anim-value { font-weight: 600; color: var(--text); font-size: .95rem; }
+.conv-anim-mono { font-family: var(--mono); }
+.conv-anim-controls .btn { padding: .4rem .9rem; font-size: .85rem; }
+.conv-anim-caption { text-align: center; max-width: 46ch; margin: 0; font-size: .82rem; }
+
+/* =========================
    Responsive
    ========================= */
 @media (max-width: 860px) {
