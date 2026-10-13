@@ -5,5 +5,5 @@ Digital design projects in Verilog, covering ASIC/FPGA development from RTL thro
 ## Highlights
 - Write-up coming soon. See the GitHub repo for source code in the meantime.
 
-## Tech
+## Tools
 Verilog &middot; Quartus Prime

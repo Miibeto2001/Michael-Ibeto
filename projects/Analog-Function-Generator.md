@@ -5,5 +5,5 @@ Designed and simulated analog circuits including filters, comparators, and power
 ## Highlights
 - Write-up coming soon. Check back for circuit details and simulation results.
 
-## Tech
+## Tools
 LTspice &middot; KiCad

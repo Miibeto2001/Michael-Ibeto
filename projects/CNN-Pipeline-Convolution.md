@@ -10,15 +10,11 @@ Convolution is a key computational stage in modern image-processing and neural-n
 - 8-bit saturation logic on the output path
 - Timing-closed synthesis at a 6ns clock period
 
-## Tech
+## Tools
 SystemVerilog · ModelSim · Synopsys Design Compiler (synthesis) · CMake build flow
 
-## Design Description
-
-### Datapath
-The datapath stores the entire 4×4 kernel and a 4×4 input window in locally buffered registers to avoid repeated DRAM accesses, enabling fast sliding-window computation. A single signed MAC unit iterates through the kernel and input window elements sequentially, accumulating partial sums over multiple cycles to produce one output pixel per window position. Intermediate sums are stored in dedicated registers so that multiple column positions can be computed in flight as the window shifts horizontally across the image. Once accumulation is complete, results are saturated to 8-bit signed range and written back to DRAM in burst format to maintain memory bandwidth efficiency. This architecture significantly reduces area and simplifies routing at the cost of requiring more cycles.
-
-At each window position, the engine computes:
+## Algorithm
+The engine implements a standard sliding-window convolution: the 4×4 kernel moves one position at a time across the 1024×1024 input, left to right within a row and then down to the next row, producing a 1021×1021 grid of output pixels. At each window position, the engine computes:
 
 ```
 Y(i,j) = Σ(m=0..3) Σ(n=0..3) X(i+m, j+n) · K(m,n)
@@ -33,31 +29,18 @@ K = | 1  0  -1  0 |
     | 1  0  -1  0 |
 ```
 
-The convolution output is accumulated at 20-bit precision to absorb overflow, then truncated (clamped) to a signed 8-bit value before being written back to DRAM.
+Each output is accumulated at 20-bit precision to absorb overflow, then truncated (clamped) to a signed 8-bit value before being written back to DRAM.
+
+## Architecture
+
+### Datapath
+The datapath stores the entire 4×4 kernel and a 4×4 input window in locally buffered registers to avoid repeated DRAM accesses, enabling fast sliding-window computation. A single signed MAC unit iterates through the kernel and input window elements sequentially, accumulating the partial sums above over multiple cycles to produce one output pixel per window position. Intermediate sums are stored in dedicated registers so that multiple column positions can be computed in flight as the window shifts horizontally across the image. Once accumulation is complete, results are saturated to 8-bit signed range and written back to DRAM in burst format to maintain memory bandwidth efficiency. This architecture significantly reduces area and simplifies routing at the cost of requiring more cycles.
 
 ### Finite State Machine
 The controller is a multi-phase FSM that sequences DRAM transactions, data buffering, MAC operations, and output writeback. After a start signal, the FSM first loads the 4×4 kernel using two burst reads into on-chip registers, then iteratively loads input tiles from DRAM, buffering two rows at a time to form the sliding 4×4 convolution window. During computation states, the FSM feeds kernel and input values into the single MAC datapath, storing intermediate partial sums across multiple columns. Once all kernel rows are processed, the FSM finalizes results with saturation logic and issues a burst write back to DRAM. Row and column counters drive progression across the full 1024×1024 image, reusing the same control flow for every window.
 
-### Interface
-The DUT talks to a DRAM-backed test fixture over a simple start/ready handshake plus a burst-oriented SDR memory bus (`CMD`, `Address`, tri-stated `DQ`):
-
-<img src="assets/img/cnn-pipeline/figure2-test-fixture.png" alt="Test fixture block diagram showing DRAM, tri-state drivers, DUT, testbench driver, and SRAM connections" style="max-width:100%;border-radius:8px;margin:0.5rem 0;" />
-
-The test fixture treats the synchronous rising edge of `ready` as the end-of-test indication:
-
-<img src="assets/img/cnn-pipeline/figure3-handshake-timing.png" alt="DUT to testbench handshake timing diagram showing clk, reset_n, ready, start, dut state, and test fixture signals" style="max-width:100%;border-radius:8px;margin:0.5rem 0;" />
-
-### Memory Layout & Zero Padding
-DRAM is laid out as 64-bit little-endian words: the first 16 entries hold the 4×4 kernel weights, followed by the input matrix in row-major order. Since the 1021×1021 convolution output isn't a multiple of 8, each output row is zero-padded to the next multiple of 8 bytes so every row starts at a modulo-8 address. For a 32×32 example input:
-
-<img src="assets/img/cnn-pipeline/figure5-padding-464.png" alt="Example matrix sizes and zero padding for the convolution-only output, 32x32 example input padded from 29 to 32" style="max-width:100%;border-radius:8px;margin:0.5rem 0;" />
-
-The same scheme scales to the full-size matrices used here: 1021 output rows/columns pad out to 1024.
-
-### Sliding-Window Addressing Algorithm
-Every output pixel comes from sliding the 4×4 kernel one position at a time across the 1024×1024 input, left to right within a row and then down to the next row, producing a 1021×1021 grid of valid window positions. At each position, the hardware doesn't fetch the whole 4×4 window at once. It steps through the 16 operands one at a time for the single serialized MAC unit, so the DRAM address has to be recomputed every cycle from two nested counters: an outer counter marking the window's current top-left corner, and an inner counter marking which of the 4 rows/columns *within* that window is being read right now.
-
-That's exactly what this part of the DUT does:
+### Sliding-Window Addressing
+The FSM above doesn't fetch a whole 4×4 window at once. It steps through the 16 operands one at a time for the single serialized MAC unit, so the DRAM address has to be recomputed every cycle from two nested counters: an outer counter marking the window's current top-left corner, and an inner counter marking which of the 4 rows/columns *within* that window is being read right now. That's exactly what this part of the DUT does:
 
 ```systemverilog
 // Declare internal address
@@ -83,13 +66,29 @@ always_comb begin
 end
 ```
 
-`row_next`/`col_next` are the sliding window's current position in the image (they advance as the window moves across and down), while `row_index`/`col_window` are the 0 to 3 offsets that step through the window's 4 rows and columns internally while that position is being accumulated. Adding them together (`row = row_next + row_index`, `col = col_next + col_window`) gives the true pixel coordinate to fetch next. `dram_addr_input` turns that into a byte address: `0x10` is the base address where the input matrix starts (right after the 16 bytes of kernel data), `row*1024` skips to the correct row (each row is 1024 bytes), and `col*8` lands on the correct burst-aligned group of 8 pixels, matching the 64-bit burst layout described above. The `in_addr_sel` mux then picks what actually goes out on the address bus each cycle: one of the two fixed kernel addresses during kernel load, the computed sliding address during normal operation, or a held/feedback value while the FSM is waiting mid-burst.
+`row_next`/`col_next` are the sliding window's current position in the image (they advance as the window moves across and down), while `row_index`/`col_window` are the 0 to 3 offsets that step through the window's 4 rows and columns internally while that position is being accumulated. Adding them together (`row = row_next + row_index`, `col = col_next + col_window`) gives the true pixel coordinate to fetch next. `dram_addr_input` turns that into a byte address: `0x10` is the base address where the input matrix starts (right after the 16 bytes of kernel data), `row*1024` skips to the correct row (each row is 1024 bytes), and `col*8` lands on the correct burst-aligned group of 8 pixels, matching the 64-bit burst layout described below. The `in_addr_sel` mux then picks what actually goes out on the address bus each cycle: one of the two fixed kernel addresses during kernel load, the computed sliding address during normal operation, or a held/feedback value while the FSM is waiting mid-burst.
 
 <div class="conv-animation" id="convAnim">Loading interactive demo&hellip;</div>
 
 The demo above raster-scans a 4×4 window across a stylized 1024×1024 grid the same way `row_next`/`col_next` do in hardware, with a live readout of the resulting `dram_addr_input` computed from the formula above. Positions are sampled across the full sweep for visualization. The real datapath steps through all 1,021×1,021 window positions, one MAC operand at a time.
 
-### Datapath & FSM Diagrams
+### Interface
+The DUT talks to a DRAM-backed test fixture over a simple start/ready handshake plus a burst-oriented SDR memory bus (`CMD`, `Address`, tri-stated `DQ`):
+
+<img src="assets/img/cnn-pipeline/figure2-test-fixture.png" alt="Test fixture block diagram showing DRAM, tri-state drivers, DUT, testbench driver, and SRAM connections" style="max-width:100%;border-radius:8px;margin:0.5rem 0;" />
+
+The test fixture treats the synchronous rising edge of `ready` as the end-of-test indication:
+
+<img src="assets/img/cnn-pipeline/figure3-handshake-timing.png" alt="DUT to testbench handshake timing diagram showing clk, reset_n, ready, start, dut state, and test fixture signals" style="max-width:100%;border-radius:8px;margin:0.5rem 0;" />
+
+### Memory Layout & Zero Padding
+DRAM is laid out as 64-bit little-endian words: the first 16 entries hold the 4×4 kernel weights, followed by the input matrix in row-major order. Since the 1021×1021 convolution output isn't a multiple of 8, each output row is zero-padded to the next multiple of 8 bytes so every row starts at a modulo-8 address. For a 32×32 example input:
+
+<img src="assets/img/cnn-pipeline/figure5-padding-464.png" alt="Example matrix sizes and zero padding for the convolution-only output, 32x32 example input padded from 29 to 32" style="max-width:100%;border-radius:8px;margin:0.5rem 0;" />
+
+The same scheme scales to the full-size matrices used here: 1021 output rows/columns pad out to 1024.
+
+### Diagrams
 <img src="assets/img/cnn-pipeline/datapath-fsm-diagram.png" alt="Hand-drawn datapath block diagram, FSM state diagram, and DRAM addressing notes for the convolution engine" style="max-width:100%;border-radius:8px;margin:0.5rem 0;" />
 
 Full datapath block diagram (DRAM-to-DUT handshake, kernel/input buffering, MAC tree, output writeback), the FSM state diagram, and the DRAM burst-addressing notes used to derive the design. [Download full-resolution diagram (PDF)](assets/reports/CNN-Pipeline-Datapath-FSM.pdf)
