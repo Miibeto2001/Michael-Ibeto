@@ -115,7 +115,13 @@ Standard 1024×1024 test image used to validate the convolution pipeline.
 Smaller 32×32 debug patterns used during development to speed up iteration before running the full 1024×1024 input.
 
 ## Conclusion
-With additional refinement, performance could be improved by further pipelining the MAC accumulation path or reducing memory stalls during input window loading. A natural extension would be parallelizing multiple MAC units to compute more output pixels per cycle, trading area for throughput. Integrating activation and pooling stages would allow the module to function as a complete CNN layer rather than a standalone convolution unit. Additional optimizations such as wider DRAM burst widths or input buffering via on-chip SRAM could further reduce latency and external memory dependence. The current implementation provides a functional, timing-closed hardware foundation suitable for scaling into a larger accelerator architecture.
+The current implementation provides a functional, timing-closed hardware foundation suitable for scaling into a larger accelerator architecture.
+
+**Future Work**
+- Pipeline the MAC accumulation path and reduce memory stalls during input window loading to improve performance
+- Parallelize multiple MAC units to compute more output pixels per cycle, trading area for throughput
+- Integrate activation and pooling stages so the module functions as a complete CNN layer rather than a standalone convolution unit
+- Widen DRAM burst widths or add on-chip SRAM buffering to further reduce latency and external memory dependence
 
 **Real-World Applications**
 - **Edge detection in embedded vision.** The kernel used here subtracts each pixel from its neighbor two columns over, which functions as a simplified vertical-edge operator, the same first step used in computer-vision pipelines for lane detection, object boundary extraction, and automated defect inspection.
