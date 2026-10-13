@@ -6,7 +6,7 @@
   <title>Michael Ibeto – Projects & Portfolio</title>
   <meta name="description" content="Electrical engineering portfolio of Michael Ibeto — ASIC/FPGA digital design, embedded systems, and analog projects.">
   <meta name="color-scheme" content="light dark">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%234da3ff'/%3E%3Ctext x='16' y='22' font-family='system-ui,sans-serif' font-size='15' font-weight='700' text-anchor='middle' fill='%2306111f'%3EMI%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%232563eb'/%3E%3Ctext x='16' y='22' font-family='system-ui,sans-serif' font-size='15' font-weight='700' text-anchor='middle' fill='%23ffffff'%3EMI%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
@@ -14,55 +14,152 @@
     <div class="container header-inner">
       <div class="brand">
         <a href="./" class="brand-link">Michael Ibeto</a>
+        <span class="brand-tagline">Electrical Engineer — ASIC/FPGA Design &amp; Embedded Systems</span>
       </div>
       <nav class="nav">
-        <a href="#projects">Projects</a>
+        <a href="#projects" class="active">Projects</a>
         <a href="#courses">Courses</a>
+        <a href="#education">Education</a>
         <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-        <button id="themeToggle" type="button" aria-label="Switch theme">🌓</button>
+        <a href="#about">Contact</a>
+        <button id="themeToggle" type="button" aria-label="Switch theme"></button>
       </nav>
     </div>
   </header>
+
   <main class="container">
     <section class="hero">
-      <h1>Michael Ibeto</h1>
-      <p class="tagline">Electrical Engineer — ASIC/FPGA Design &amp; Embedded Systems</p>
-      <div class="cta">
-        <a class="btn" href="#projects">View Projects</a>
+      <svg class="circuit-deco top-left" viewBox="0 0 220 220" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M0 40 H60 V90 H110" stroke-dasharray="3 4"/>
+        <path d="M20 0 V30 H70" stroke-dasharray="3 4"/>
+        <path d="M0 120 H40 V160" stroke-dasharray="3 4"/>
+        <circle cx="60" cy="40" r="3" fill="currentColor" stroke="none"/>
+        <circle cx="60" cy="90" r="3" fill="currentColor" stroke="none"/>
+        <circle cx="110" cy="90" r="3" fill="currentColor" stroke="none"/>
+        <circle cx="70" cy="30" r="3" fill="currentColor" stroke="none"/>
+        <circle cx="40" cy="120" r="3" fill="currentColor" stroke="none"/>
+        <circle cx="40" cy="160" r="3" fill="currentColor" stroke="none"/>
+      </svg>
+
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Hi, I'm</span>
+          <h1>Michael Ibeto</h1>
+          <p class="hero-subtitle">Electrical Engineer — ASIC/FPGA Design &amp; Embedded Systems</p>
+          <hr class="hero-rule">
+          <p class="lede">I build efficient digital systems and embedded solutions using modern hardware design and verification tools.</p>
+          <div class="hero-meta">
+            <span class="meta-item" data-icon="mapPin">Raleigh, NC</span>
+            <span class="meta-item" data-icon="cap">Electrical Engineering</span>
+            <span class="meta-item" data-icon="code">Hardware &middot; FPGA &middot; Embedded</span>
+          </div>
+        </div>
+
+        <div id="featuredProject"></div>
       </div>
     </section>
+
     <section id="projects" class="projects">
-      <span class="section-label">Work</span>
+      <span class="eyebrow">Work</span>
       <h2>Design Portfolio</h2>
       <div id="projectsGrid" class="grid"></div>
     </section>
+
     <section id="courses" class="courses">
-      <span class="section-label">Coursework</span>
-      <h2>Courses</h2>
-      <ul>
-        <li>ECE 546 – VLSI Systems Design</li>
-        <li>ECE 564 – ASIC &amp; FPGA Design</li>
-        <li>ECE 506 – Architecture of Parallel Computers</li>
-      </ul>
-    </section>
-    <section id="about" class="about">
-      <span class="section-label">Background</span>
-      <h2>About</h2>
-      <p>I'm an electrical engineering student at NC State University, focused on digital design, ASIC/FPGA development, and embedded systems.</p>
-    </section>
-    <section id="contact" class="contact">
-      <span class="section-label">Get in touch</span>
-      <h2>Contact</h2>
-      <p>Email: <a href="mailto:miibeto01@gmail.com">miibeto01@gmail.com</a></p>
-      <p>LinkedIn: <a href="http://linkedin.com/in/michael-ibeto-873b45162" target="_blank" rel="noopener">linkedin.com/in/michael-ibeto</a></p>
+      <span class="eyebrow">Coursework</span>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-card-head">
+            <span class="card-icon" data-icon="cap"></span>
+            <h3>Coursework</h3>
+          </div>
+          <ul class="course-list">
+            <li><span class="dot" data-icon="dot"></span> ECE 546 – VLSI Systems Design</li>
+            <li><span class="dot" data-icon="dot"></span> ECE 564 – ASIC &amp; FPGA Design</li>
+            <li><span class="dot" data-icon="dot"></span> ECE 506 – Architecture of Parallel Computers</li>
+          </ul>
+        </div>
+
+        <div class="info-card" id="education">
+          <div class="info-card-head">
+            <span class="card-icon" data-icon="cap"></span>
+            <h3>Education</h3>
+          </div>
+          <div class="edu-list">
+            <div class="edu-item">
+              <span class="edu-dot"></span>
+              <div>
+                <div class="edu-row">
+                  <span class="edu-degree">Master of Science in Electrical Engineering</span>
+                  <span class="edu-pill">Expected 2027</span>
+                </div>
+                <div class="edu-school">North Carolina State University</div>
+              </div>
+            </div>
+            <div class="edu-item">
+              <span class="edu-dot"></span>
+              <div>
+                <div class="edu-row">
+                  <span class="edu-degree">Bachelor of Science in Electrical Engineering</span>
+                  <span class="edu-pill">Graduated 2023</span>
+                </div>
+                <div class="edu-school">North Carolina State University</div>
+              </div>
+            </div>
+            <div class="edu-item">
+              <span class="edu-dot"></span>
+              <div>
+                <div class="edu-row">
+                  <span class="edu-degree">Associate in Engineering</span>
+                </div>
+                <div class="edu-school">Wake Technical Community College (Wake Tech)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card about-card" id="about">
+          <div class="info-card-head">
+            <span class="card-icon" data-icon="user"></span>
+            <h3>About Me</h3>
+          </div>
+          <p class="desc">I'm an electrical engineering student at NC State University, focused on digital design, ASIC/FPGA development, and embedded systems.</p>
+          <div class="contact-list">
+            <div class="contact-row">
+              <span class="card-icon" data-icon="mail"></span>
+              <div>
+                <span class="contact-label">Email</span>
+                <a href="mailto:miibeto01@gmail.com">miibeto01@gmail.com</a>
+              </div>
+            </div>
+            <div class="contact-row">
+              <span class="card-icon" data-icon="linkedin"></span>
+              <div>
+                <span class="contact-label">LinkedIn</span>
+                <a href="http://linkedin.com/in/michael-ibeto-873b45162" target="_blank" rel="noopener">linkedin.com/in/michael-ibeto</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
+
   <footer class="site-footer">
     <div class="container">
       <small>© <span id="year"></span> Michael Ibeto</small>
     </div>
+    <svg class="circuit-deco bottom-right" viewBox="0 0 220 220" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M220 180 H160 V130 H110" stroke-dasharray="3 4"/>
+      <path d="M200 220 V190 H150" stroke-dasharray="3 4"/>
+      <circle cx="160" cy="180" r="3" fill="currentColor" stroke="none"/>
+      <circle cx="160" cy="130" r="3" fill="currentColor" stroke="none"/>
+      <circle cx="110" cy="130" r="3" fill="currentColor" stroke="none"/>
+      <circle cx="150" cy="190" r="3" fill="currentColor" stroke="none"/>
+    </svg>
   </footer>
+
+  <script src="assets/js/icons.js"></script>
   <script src="assets/js/projects.js"></script>
   <script src="assets/js/main.js"></script>
 </body>

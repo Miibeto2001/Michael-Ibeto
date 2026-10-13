@@ -4,17 +4,23 @@
       "title": "CNN Convolution Pipeline (1024x1024, 4x4 Kernel)",
       "file": "projects/CNN-Pipeline-Convolution.md",
       "tags": ["Digital Design", "ASIC/FPGA", "SystemVerilog", "ECE564"],
-      "link": "https://github.com/Miibeto2001/CNN-Convolution-Pipeline"
+      "link": "https://github.com/Miibeto2001/CNN-Convolution-Pipeline",
+      "featured": true,
+      "summary": "Implemented a high-throughput CNN convolution pipeline with 1024x1024 input and 4x4 kernel, optimized for FPGA/ASIC deployment."
     },
     {
       "title": "Asic/FPGA Design",
-      "tags": ["Digital Design", " (HDL: Verilog)"],
-      "link": "https://github.com/Miibeto2001/Digital-Design"
+      "tags": ["Digital Design", "HDL: Verilog"],
+      "link": "https://github.com/Miibeto2001/Digital-Design",
+      "icon": "cpu",
+      "summary": "Designed and verified digital logic for high-performance ASIC/FPGA systems using SystemVerilog and EDA tools."
     },
     {
       "file": "projects/Analog-Function-Generator.md",
       "title": "Analog Design",
-      "tags": ["Analog", "LTspice", "KiCAD"]
+      "tags": ["Analog", "LTspice", "KiCAD"],
+      "icon": "activity",
+      "summary": "Designed and simulated analog circuits including filters, comparators, and power management systems."
     }
   ]
 }

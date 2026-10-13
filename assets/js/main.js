@@ -3,6 +3,9 @@
   const y = document.getElementById('year');
   if (y) y.textContent = new Date().getFullYear();
 
+  // STATIC ICONS
+  if (typeof hydrateIcons === 'function') hydrateIcons(document);
+
   // THEME
   const root = document.documentElement;
   const btn = document.getElementById('themeToggle');
@@ -29,7 +32,7 @@
 
   function updateToggleIcon(theme) {
     if (!btn) return;
-    btn.textContent = theme === 'dark' ? '🌞' : '🌙';
+    btn.innerHTML = theme === 'dark' ? ICONS.sun : ICONS.moon;
     const label = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
     btn.setAttribute('aria-label', label);
     btn.title = label;

@@ -1,11 +1,9 @@
-# Analog Function Generator
+# Analog Design
 
-xxxxxxxxxxxxxxxxxxxxxxxx
+Designed and simulated analog circuits including filters, comparators, and power management systems.
 
 ## Highlights
-- xxxxxxxxxxxxxxxxxxxxxx
-- xxxxxxxxxxxxxxxxxxxxxx
-- xxxxxxxxxxxxxxxxxxxxxx
+- (write-up coming soon — check back for circuit details and simulation results)
 
 ## Tech
-xxxxxxxxxxxxxxxxxxxxxxxx
+LTspice &middot; KiCad
