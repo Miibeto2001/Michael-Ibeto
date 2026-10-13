@@ -11,7 +11,7 @@
     },
     {
       "title": "Asic/FPGA Design",
-      "tags": ["Digital Design", "HDL: Verilog"],
+      "tags": ["Digital Design", "HDL: Verilog", "Quartus Prime"],
       "link": "https://github.com/Miibeto2001/Digital-Design",
       "icon": "cpu",
       "summary": "Designed and verified digital logic for high-performance ASIC/FPGA systems using SystemVerilog and EDA tools."
