@@ -74,7 +74,6 @@ function renderFeatured({ title, desc, tags, file, repo, illustration }) {
   const illustrationFn = illustration && ILLUSTRATIONS[illustration];
 
   el.innerHTML = `
-    <span class="featured-badge">Featured Project</span>
     <h3>${escapeHtml(title || 'Untitled Project')}</h3>
     <p>${escapeHtml(desc || '')}</p>
     ${Array.isArray(tags) && tags.length ? `<div class="featured-tags">${tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
@@ -93,14 +92,11 @@ function renderCard({ title, desc, tags, icon }, index) {
 
   el.innerHTML = `
     <div class="card-head">
-      <div class="card-head-left">
-        <span class="card-icon" data-icon="${icon}"></span>
-        <div class="card-title-group">
-          <h3>${escapeHtml(title || 'Untitled Project')}</h3>
-          ${Array.isArray(tags) && tags.length ? `<div class="tags-inline">${tags.map(t => escapeHtml(t)).join('<span class="sep">|</span>')}</div>` : ''}
-        </div>
+      <span class="card-icon" data-icon="${icon}"></span>
+      <div class="card-title-group">
+        <h3>${escapeHtml(title || 'Untitled Project')}</h3>
+        ${Array.isArray(tags) && tags.length ? `<div class="tags-inline">${tags.map(t => escapeHtml(t)).join('<span class="sep">|</span>')}</div>` : ''}
       </div>
-      <span class="card-view-link">View Project ${ICONS.arrowRight}</span>
     </div>
     <p class="desc">${escapeHtml(desc || '')}</p>
   `;
