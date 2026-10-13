@@ -290,7 +290,11 @@ main.container > section.hero { padding-top: 3.5rem; position: relative; }
 .edu-school { color: var(--muted); font-size: .85rem; margin-top: .1rem; }
 .edu-pill { font-size: .72rem; font-weight: 600; color: var(--pill-text); background: var(--pill-bg); padding: .2rem .55rem; border-radius: 999px; white-space: nowrap; }
 
-.about-card p.desc { color: var(--muted); font-size: .92rem; margin: 0 0 1.1rem; }
+.about-card p.desc { color: var(--muted); font-size: .92rem; margin: 0 0 .9rem; }
+.about-highlights { margin-bottom: 1.1rem; }
+.about-highlights li { align-items: flex-start; }
+.about-highlights .dot { margin-top: .45em; }
+.about-highlights a { font-weight: 600; }
 .contact-list { display: flex; flex-direction: column; gap: .75rem; }
 .contact-row { display: flex; align-items: center; gap: .75rem; }
 .contact-row .card-icon { width: 1.9rem; height: 1.9rem; font-size: .95rem; }
