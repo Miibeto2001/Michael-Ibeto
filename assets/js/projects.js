@@ -1,6 +1,11 @@
 const grid = document.getElementById('projectsGrid');
 const featuredSlot = document.getElementById('featuredProject');
 
+const ILLUSTRATIONS = { cnn: cnnIllustrationSvg };
+
+let projectsData = [];
+let selectedIndex = 0;
+
 (async () => {
   try {
     const url = new URL('projects.json', document.baseURI);
@@ -27,22 +32,38 @@ const featuredSlot = document.getElementById('featuredProject');
         file: p.file || null,
         repo: p.link || null,
         icon: p.icon || 'cpu',
+        illustration: p.illustration || null,
         featured: !!p.featured,
       });
     }
 
-    const featured = resolved.find((p) => p.featured);
-    const rest = resolved.filter((p) => !p.featured);
+    projectsData = resolved;
+    selectedIndex = Math.max(0, resolved.findIndex((p) => p.featured));
 
-    if (featured && featuredSlot) renderFeatured(featured);
-    rest.forEach(renderCard);
+    resolved.forEach((p, i) => renderCard(p, i));
+    selectProject(selectedIndex, { scroll: false });
   } catch (e) {
     console.error(e);
     showError(String(e));
   }
 })();
 
-function renderFeatured({ title, desc, tags, file, repo }) {
+function selectProject(index, { scroll = true } = {}) {
+  if (!projectsData[index] || !featuredSlot) return;
+  selectedIndex = index;
+  featuredSlot.innerHTML = '';
+  renderFeatured(projectsData[index]);
+
+  grid.querySelectorAll('.card').forEach((card) => {
+    const isActive = Number(card.dataset.index) === index;
+    card.classList.toggle('is-active', isActive);
+    card.setAttribute('aria-pressed', String(isActive));
+  });
+
+  if (scroll) featuredSlot.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function renderFeatured({ title, desc, tags, file, repo, illustration }) {
   const el = document.createElement('div');
   el.className = 'featured-card';
 
@@ -50,23 +71,25 @@ function renderFeatured({ title, desc, tags, file, repo }) {
   if (file) actions += `<a class="btn" href="project.html?file=${encodeURIComponent(file)}">${ICONS.externalLink} Read Case Study</a>`;
   if (repo) actions += `<a class="btn btn-ghost-light" href="${repo}" target="_blank" rel="noopener">${ICONS.github} GitHub</a>`;
 
+  const illustrationFn = illustration && ILLUSTRATIONS[illustration];
+
   el.innerHTML = `
     <span class="featured-badge">Featured Project</span>
     <h3>${escapeHtml(title || 'Untitled Project')}</h3>
     <p>${escapeHtml(desc || '')}</p>
     ${Array.isArray(tags) && tags.length ? `<div class="featured-tags">${tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
     ${actions ? `<div class="featured-actions">${actions}</div>` : ''}
-    <div class="featured-illustration">${cnnIllustrationSvg()}</div>
+    ${illustrationFn ? `<div class="featured-illustration">${illustrationFn()}</div>` : ''}
   `;
   featuredSlot.appendChild(el);
 }
 
-function renderCard({ title, desc, tags, file, repo, icon }) {
-  const el = document.createElement('div');
+function renderCard({ title, desc, tags, icon }, index) {
+  const el = document.createElement('button');
+  el.type = 'button';
   el.className = 'card';
-
-  const href = file ? `project.html?file=${encodeURIComponent(file)}` : (repo || '#');
-  const target = file ? '' : ' target="_blank" rel="noopener"';
+  el.dataset.index = String(index);
+  el.setAttribute('aria-pressed', 'false');
 
   el.innerHTML = `
     <div class="card-head">
@@ -77,10 +100,11 @@ function renderCard({ title, desc, tags, file, repo, icon }) {
           ${Array.isArray(tags) && tags.length ? `<div class="tags">${tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
         </div>
       </div>
-      <a class="card-view-link" href="${href}"${target}>View Project ${ICONS.arrowRight}</a>
+      <span class="card-view-link">View Project ${ICONS.arrowRight}</span>
     </div>
     <p class="desc">${escapeHtml(desc || '')}</p>
   `;
+  el.addEventListener('click', () => selectProject(index));
   grid.appendChild(el);
   hydrateIcons(el);
 }

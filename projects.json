@@ -6,6 +6,7 @@
       "tags": ["Digital Design", "ASIC/FPGA", "SystemVerilog", "ECE564"],
       "link": "https://github.com/Miibeto2001/CNN-Convolution-Pipeline",
       "featured": true,
+      "illustration": "cnn",
       "summary": "Implemented a high-throughput CNN convolution pipeline with 1024x1024 input and 4x4 kernel, optimized for FPGA/ASIC deployment."
     },
     {

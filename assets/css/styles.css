@@ -248,13 +248,23 @@ main.container > section.hero { padding-top: 3.5rem; }
   border-radius: 12px;
   border: 1px solid var(--card-border);
   transition: border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+  display: block;
+  width: 100%;
+  margin: 0;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
 }
 .card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 10px 24px -14px rgba(15,23,42,.25); }
+.card.is-active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 10px 24px -14px rgba(15,23,42,.25); }
 .card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: .75rem; }
 .card-head-left { display: flex; align-items: flex-start; gap: .75rem; }
 .card-title-group h3 { margin: 0 0 .15rem; font-size: 1.05rem; }
-.card-view-link { display: inline-flex; align-items: center; gap: .3rem; font-size: .85rem; font-weight: 600; text-decoration: none; color: var(--accent); white-space: nowrap; }
-.card-view-link:hover { text-decoration: underline; }
+.card-view-link { display: inline-flex; align-items: center; gap: .3rem; font-size: .85rem; font-weight: 600; color: var(--accent); white-space: nowrap; }
+.card:hover .card-view-link, .card.is-active .card-view-link { text-decoration: underline; }
 .card p.desc { color: var(--muted); font-size: .92rem; margin: .85rem 0 0; }
 
 /* =========================
