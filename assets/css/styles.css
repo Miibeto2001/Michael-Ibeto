@@ -2,7 +2,7 @@
    Theme tokens
    ========================= */
 :root {
-  --bg: #f8f9fb;
+  --bg: #f4f8fc;
   --text: #0f172a;
   --surface: #ffffff;
   --surface-alt: #eef4ff;
@@ -20,6 +20,7 @@
   --featured-border: #24357a;
   --featured-tag-bg: rgba(255,255,255,.12);
   --featured-tag-text: #bfd4ff;
+  --circuit-line: #a7c6fb;
   --mono: ui-monospace, SFMono-Regular, "Cascadia Code", Consolas, "Liberation Mono", monospace;
 }
 
@@ -42,6 +43,7 @@
   --featured-border: #2d3f8a;
   --featured-tag-bg: rgba(255,255,255,.1);
   --featured-tag-text: #bfd4ff;
+  --circuit-line: #2f4374;
 }
 
 /* =========================
@@ -166,7 +168,7 @@ svg.icon { width: 1em; height: 1em; vertical-align: -0.125em; flex-shrink: 0; }
    Sections
    ========================= */
 main.container > section { padding: 2.75rem 0; }
-main.container > section.hero { padding-top: 3.5rem; }
+main.container > section.hero { padding-top: 3.5rem; position: relative; }
 
 /* =========================
    Hero
@@ -187,7 +189,7 @@ main.container > section.hero { padding-top: 3.5rem; }
 .hero-meta .meta-item { display: inline-flex; align-items: center; gap: .4rem; }
 .hero-meta .icon { color: var(--accent); }
 
-.circuit-deco { position: absolute; pointer-events: none; z-index: -1; color: var(--card-border); opacity: .9; }
+.circuit-deco { position: absolute; pointer-events: none; z-index: 0; color: var(--circuit-line); opacity: .7; }
 .circuit-deco.top-left { top: -2.5rem; left: -4rem; width: 220px; height: 220px; }
 .circuit-deco.bottom-right { bottom: -1rem; right: -3rem; width: 220px; height: 220px; }
 
