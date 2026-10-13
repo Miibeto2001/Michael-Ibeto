@@ -97,7 +97,7 @@ function renderCard({ title, desc, tags, icon }, index) {
         <span class="card-icon" data-icon="${icon}"></span>
         <div class="card-title-group">
           <h3>${escapeHtml(title || 'Untitled Project')}</h3>
-          ${Array.isArray(tags) && tags.length ? `<div class="tags">${tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
+          ${Array.isArray(tags) && tags.length ? `<div class="tags-inline">${tags.map(t => escapeHtml(t)).join('<span class="sep">|</span>')}</div>` : ''}
         </div>
       </div>
       <span class="card-view-link">View Project ${ICONS.arrowRight}</span>
@@ -132,54 +132,48 @@ function parseMarkdown(md, titleOverride) {
 
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
+function lerp(a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]; }
+function pts(arr) { return arr.map(p => p.join(',')).join(' '); }
+
+function isoBox(cx, cy, w, h, depth, grid) {
+  const N = [cx, cy - h], E = [cx + w, cy], S = [cx, cy + h], W = [cx - w, cy];
+  const Sd = [S[0], S[1] + depth], Ed = [E[0], E[1] + depth], Wd = [W[0], W[1] + depth];
+
+  let gridLines = '';
+  for (let i = 1; i < grid; i++) {
+    const t = i / grid;
+    const a = lerp(N, W, t), b = lerp(E, S, t);
+    const c = lerp(N, E, t), d = lerp(W, S, t);
+    gridLines += `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="rgba(255,255,255,.32)" stroke-width=".75"/>`;
+    gridLines += `<line x1="${c[0]}" y1="${c[1]}" x2="${d[0]}" y2="${d[1]}" stroke="rgba(255,255,255,.32)" stroke-width=".75"/>`;
+  }
+  for (let i = 1; i < 3; i++) {
+    const t = i / 3;
+    const l1 = lerp(W, Wd, t), l2 = lerp(S, Sd, t), r1 = lerp(S, Sd, t), r2 = lerp(E, Ed, t);
+    gridLines += `<line x1="${l1[0]}" y1="${l1[1]}" x2="${l2[0]}" y2="${l2[1]}" stroke="rgba(255,255,255,.18)" stroke-width=".75"/>`;
+    gridLines += `<line x1="${r1[0]}" y1="${r1[1]}" x2="${r2[0]}" y2="${r2[1]}" stroke="rgba(255,255,255,.18)" stroke-width=".75"/>`;
+  }
+
+  return `
+    <polygon points="${pts([W, S, Sd, Wd])}" fill="#3f63d1"/>
+    <polygon points="${pts([S, E, Ed, Sd])}" fill="#2a4bb8"/>
+    <polygon points="${pts([N, E, S, W])}" fill="#7ea2f2"/>
+    ${gridLines}
+  `;
+}
+
 function cnnIllustrationSvg() {
+  const b1 = isoBox(58, 56, 34, 17, 46, 4);
+  const b2 = isoBox(168, 66, 22, 11, 32, 3);
+  const b3 = isoBox(252, 72, 13, 6.5, 20, 2);
   return `
   <svg viewBox="0 0 300 160" width="260" height="140" fill="none">
-    <defs>
-      <linearGradient id="fmGrad" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#5b8def"/>
-        <stop offset="1" stop-color="#2f52c6"/>
-      </linearGradient>
-    </defs>
-    <line x1="92" y1="78" x2="140" y2="78" stroke="#7ea2ef" stroke-width="1.5" stroke-dasharray="3 4"/>
-    <polygon points="140,78 132,74 132,82" fill="#7ea2ef"/>
-    <line x1="190" y1="82" x2="222" y2="82" stroke="#7ea2ef" stroke-width="1.5" stroke-dasharray="3 4"/>
-    <polygon points="222,82 214,78 214,86" fill="#7ea2ef"/>
-
-    <g>
-      <rect x="28" y="24" width="64" height="64" rx="4" fill="url(#fmGrad)" opacity=".55"/>
-      <rect x="20" y="32" width="64" height="64" rx="4" fill="url(#fmGrad)" opacity=".8"/>
-      <rect x="12" y="40" width="64" height="64" rx="4" fill="url(#fmGrad)"/>
-      <g stroke="rgba(255,255,255,.35)" stroke-width="1">
-        <line x1="12" y1="56" x2="76" y2="56"/>
-        <line x1="12" y1="72" x2="76" y2="72"/>
-        <line x1="12" y1="88" x2="76" y2="88"/>
-        <line x1="28" y1="40" x2="28" y2="104"/>
-        <line x1="44" y1="40" x2="44" y2="104"/>
-        <line x1="60" y1="40" x2="60" y2="104"/>
-      </g>
-    </g>
-
-    <g>
-      <rect x="150" y="38" width="42" height="42" rx="4" fill="url(#fmGrad)" opacity=".6"/>
-      <rect x="144" y="44" width="42" height="42" rx="4" fill="url(#fmGrad)" opacity=".85"/>
-      <rect x="138" y="50" width="42" height="42" rx="4" fill="url(#fmGrad)"/>
-      <g stroke="rgba(255,255,255,.35)" stroke-width="1">
-        <line x1="138" y1="64" x2="180" y2="64"/>
-        <line x1="138" y1="78" x2="180" y2="78"/>
-        <line x1="152" y1="50" x2="152" y2="92"/>
-        <line x1="166" y1="50" x2="166" y2="92"/>
-      </g>
-    </g>
-
-    <g>
-      <rect x="236" y="48" width="26" height="26" rx="3" fill="url(#fmGrad)" opacity=".7"/>
-      <rect x="232" y="52" width="26" height="26" rx="3" fill="url(#fmGrad)" opacity=".9"/>
-      <rect x="228" y="56" width="26" height="26" rx="3" fill="url(#fmGrad)"/>
-      <g stroke="rgba(255,255,255,.35)" stroke-width="1">
-        <line x1="228" y1="69" x2="254" y2="69"/>
-        <line x1="241" y1="56" x2="241" y2="82"/>
-      </g>
-    </g>
+    <line x1="100" y1="80" x2="140" y2="80" stroke="#9db8f3" stroke-width="1.5" stroke-dasharray="3 4"/>
+    <polygon points="140,80 132,76 132,84" fill="#9db8f3"/>
+    <line x1="196" y1="86" x2="228" y2="86" stroke="#9db8f3" stroke-width="1.5" stroke-dasharray="3 4"/>
+    <polygon points="228,86 220,82 220,90" fill="#9db8f3"/>
+    <g>${b1}</g>
+    <g>${b2}</g>
+    <g>${b3}</g>
   </svg>`;
 }
