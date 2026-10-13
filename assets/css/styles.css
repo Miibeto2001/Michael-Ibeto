@@ -212,8 +212,8 @@ main.container > section.hero { padding-top: 3.5rem; position: relative; }
 .featured-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin: .75rem 0 1.25rem; }
 .featured-tags .tag { background: var(--featured-tag-bg); color: var(--featured-tag-text); border-color: transparent; }
 .featured-actions { display: flex; gap: .6rem; flex-wrap: wrap; }
-.featured-illustration { display: flex; justify-content: flex-end; opacity: .9; margin-top: .5rem; }
-.featured-illustration svg { max-width: 100%; height: auto; }
+.featured-illustration { display: flex; justify-content: flex-end; margin-top: .5rem; }
+.featured-illustration img { max-width: 100%; height: auto; width: 260px; display: block; }
 
 /* =========================
    Projects row / cards
