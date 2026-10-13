@@ -28,14 +28,17 @@
       // Title from first H1
       const h1 = md.match(/^\s*#\s+(.+?)\s*$/m);
       const pageTitle = h1 ? h1[1].trim() : (u.pathname.split('/').pop() || 'Project');
-      document.title = pageTitle + ' – Project';
+      document.title = pageTitle + ' | Project';
       titleEl.textContent = pageTitle;
 
       // Optional: show file path under title
       metaEl.textContent = u.pathname;
 
+      // Strip the leading H1 from the body so the title isn't rendered twice
+      const mdBody = h1 ? md.slice(h1.index + h1[0].length).replace(/^\s+/, '') : md;
+
       // Render markdown into site-styled HTML
-      contentEl.innerHTML = mdToHtml(md);
+      contentEl.innerHTML = mdToHtml(mdBody);
       window.scrollTo(0, 0);
     } catch (e) {
       fail(`Could not open ${u.pathname}. ${String(e.message || e)}`);
