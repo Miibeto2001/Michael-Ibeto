@@ -117,17 +117,17 @@ Smaller 32×32 debug patterns used during development to speed up iteration befo
 ## Conclusion
 The current implementation provides a functional, timing-closed hardware foundation suitable for scaling into a larger accelerator architecture.
 
-**Future Work**
+Future Work
 - Pipeline the MAC accumulation path and reduce memory stalls during input window loading to improve performance
 - Parallelize multiple MAC units to compute more output pixels per cycle, trading area for throughput
 - Integrate activation and pooling stages so the module functions as a complete CNN layer rather than a standalone convolution unit
 - Widen DRAM burst widths or add on-chip SRAM buffering to further reduce latency and external memory dependence
 
-**Real-World Applications**
-- **Edge detection in embedded vision.** The kernel used here subtracts each pixel from its neighbor two columns over, which functions as a simplified vertical-edge operator, the same first step used in computer-vision pipelines for lane detection, object boundary extraction, and automated defect inspection.
-- **Camera image signal processing.** Burst-based DRAM streaming with a compact MAC datapath fits the throughput and area budget of an early-stage filtering block in a camera or video encoder pipeline.
-- **Edge AI and IoT inference front-ends.** The serialized, area-efficient MAC design trades cycles for area, the right tradeoff for low-power, resource-constrained devices that need to extract features on-device instead of sending raw data to the cloud.
-- **Building block for full CNN accelerators.** As noted above, this convolution stage is the foundation a complete hardware CNN layer would build on, the kind of accelerator used in robotics perception and autonomous systems that need real-time, on-chip inference.
+Real-World Applications
+- Edge detection in embedded vision: the kernel used here subtracts each pixel from its neighbor two columns over, which functions as a simplified vertical-edge operator, the same first step used in computer-vision pipelines for lane detection, object boundary extraction, and automated defect inspection
+- Camera image signal processing: burst-based DRAM streaming with a compact MAC datapath fits the throughput and area budget of an early-stage filtering block in a camera or video encoder pipeline
+- Edge AI and IoT inference front-ends: the serialized, area-efficient MAC design trades cycles for area, the right tradeoff for low-power, resource-constrained devices that need to extract features on-device instead of sending raw data to the cloud
+- Building block for full CNN accelerators: this convolution stage is the foundation a complete hardware CNN layer would build on, the kind of accelerator used in robotics perception and autonomous systems that need real-time, on-chip inference
 
 [Download full project report (PDF)](assets/reports/CNN-Pipeline-Report.pdf)
 
